@@ -1,0 +1,4 @@
+import type { Metadata } from "next";
+import { RecordPage } from "@/components/record-page"; import { getPublicRows } from "@/lib/content";
+export const metadata: Metadata = { title: "Certifications" }; export const dynamic = "force-dynamic";
+export default async function Page() { const rows = await getPublicRows("certifications"); return <RecordPage kicker="Certifications" title="Credentials tied to practical capability." intro="Current, relevant certifications with issuer and verification details." rows={rows} empty="Verified credentials will appear here." primary={(r)=>String(r.title||"")} secondary={(r)=>[r.issuer,r.issue_date].filter(Boolean).join(" · ")} description={(r)=>r.credential_id ? `Credential ${String(r.credential_id)}` : "Credential details available from the issuer."}/>; }

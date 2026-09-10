@@ -1,0 +1,2 @@
+import Link from "next/link";
+export default function NotFound() { return <main className="access-page"><div className="access-card"><span className="brand-mark">A</span><p className="admin-eyebrow">404</p><h1>This path has no published record.</h1><p>The page may have moved, or the content may still be a private draft.</p><Link className="button button-primary" href="/">Return home</Link><Link className="text-link" href="/projects">Browse projects</Link></div></main>; }

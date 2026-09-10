@@ -1,0 +1,4 @@
+import type { Metadata } from "next";
+import { RecordPage } from "@/components/record-page"; import { getPublicRows } from "@/lib/content";
+export const metadata: Metadata = { title: "Experience" }; export const dynamic = "force-dynamic";
+export default async function Page() { const rows = await getPublicRows("experiences"); return <RecordPage kicker="Experience" title="Roles where engineering met responsibility." intro="Professional, internship, and technical leadership work—focused on the systems built and the impact delivered." rows={rows} empty="Experience will appear here once verified." primary={(r)=>String(r.title||"")} secondary={(r)=>[r.organization,r.location].filter(Boolean).join(" · ")} description={(r)=>String(r.summary||"")}/>; }

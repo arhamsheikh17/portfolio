@@ -1,0 +1,2 @@
+"use client";
+export default function ErrorPage({ reset }: { reset: () => void }) { return <main className="access-page"><div className="access-card"><span className="brand-mark">A</span><p className="admin-eyebrow">Recoverable error</p><h1>The system hit an unexpected state.</h1><p>Your content is safe. Try this request again or return to the public portfolio.</p><button className="button button-primary" onClick={reset}>Try again</button><a className="text-link" href="/">Return home</a></div></main>; }
