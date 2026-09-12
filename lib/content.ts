@@ -8,50 +8,77 @@ export type ProjectRecord = {
   status: string; is_featured: number; is_published: number; display_order: number;
 };
 
-export const fallbackProject: ProjectRecord = {
-  id: "portfolio-v2",
-  title: "Professional Dynamic Portfolio",
-  slug: "dynamic-portfolio",
-  short_description: "A public engineering portfolio and private owner CMS built on a low-maintenance Cloudflare architecture.",
-  problem_statement: "Professional work changes often, but a portfolio that requires source edits for every update becomes stale. The system needed a credible public experience and a protected content workflow without a separate server or an inactivity-resume routine.",
-  objectives: "Create a fast public portfolio, keep routine content editable from one admin area, isolate public reads from protected writes, and preserve a strict zero-cost operating target for normal personal traffic.",
-  data_sources: "Owner-managed project, skill, experience, education, certification, achievement, social, and site-profile records.",
-  architecture_text: "Next.js renders public and admin routes on Cloudflare Workers. D1 is the source of truth for structured records. A media repository isolates file handling so Workers KV can serve small portfolio assets without coupling CMS forms to a storage implementation.",
-  implementation: "The public experience is organized around architecture and outcomes. Typed repository functions use bounded, indexed queries. Admin mutations validate input, require an authenticated owner identity, and maintain draft and published states.",
-  engineering_decisions: "One runtime and one codebase reduce operational overhead. D1 stores relational content instead of file blobs. Media keys are immutable. Public collections use published flags, display order, and explicit limits.",
-  challenges: "The hosting surface provisions structured persistence but does not automatically provision a Workers KV namespace. The application therefore keeps the KV adapter explicit and returns a recoverable setup state until a MEDIA binding is connected.",
-  results: "A responsive portfolio, structured case study, searchable owner CMS, versioned D1 schema, protected write routes, and a clean path to replace starter content with verified career evidence.",
-  learning: "Treating the portfolio as a small data product produces clearer content modeling, safer publishing, and less maintenance than treating it as a collection of static sections.",
-  tech_stack: JSON.stringify(["Next.js", "TypeScript", "Cloudflare Workers", "D1", "Workers KV", "Tailwind CSS"]),
-  github_url: null, demo_url: null, article_url: null, status: "completed", is_featured: 1, is_published: 1, display_order: 0,
+const project = (value: Partial<ProjectRecord> & Pick<ProjectRecord, "id" | "title" | "slug" | "short_description" | "problem_statement" | "tech_stack" | "github_url">): ProjectRecord => ({
+  objectives: "Build a dependable, automated path from source data to analytics-ready information while keeping the design scalable and maintainable.",
+  data_sources: "Operational and event data from the project domain, processed through cloud-native ingestion and transformation stages.",
+  architecture_text: "The design separates ingestion, storage, transformation, quality checks, and consumption so each stage can evolve without coupling the whole pipeline.",
+  implementation: "Built as an end-to-end engineering case study with repeatable processing, validation, and analytics-ready outputs.",
+  engineering_decisions: "Cloud services and open data tooling were selected around reliability, clear ownership, and the ability to scale each stage independently.",
+  challenges: "The core challenge was turning fragmented or fast-moving data into a consistent analytical model without introducing manual load steps.",
+  results: "A portfolio-ready reference architecture that demonstrates practical data engineering across ingestion, transformation, storage, and analysis.",
+  learning: "Reliable data products depend as much on orchestration, validation, and data contracts as they do on the individual cloud services.",
+  demo_url: null, article_url: null, status: "completed", is_featured: 0, is_published: 1, display_order: 0,
+  ...value,
+});
+
+export const fallbackProjects: ProjectRecord[] = [
+  project({ id: "azure-youtube", slug: "youtube-trending-pipeline-azure", display_order: 1, is_featured: 1, title: "YouTube Trending Data Pipeline on Azure", short_description: "An automated, multi-region pipeline for turning YouTube trending data into governed, analytics-ready datasets on Microsoft Azure.", problem_statement: "Organizations need timely insight into YouTube trends across geographic markets, but manual collection is slow, inconsistent, and difficult to govern at scale.", tech_stack: JSON.stringify(["Microsoft Azure", "Python", "ETL/ELT", "Data Quality", "Analytics"]), github_url: "https://github.com/arhamsheikh17/youtube-datapipeline-azure" }),
+  project({ id: "aws-youtube", slug: "youtube-trending-pipeline-aws", display_order: 2, is_featured: 1, title: "YouTube Trending Data Pipeline on AWS", short_description: "A scalable AWS workflow that automates collection, transformation, validation, and analysis of multi-region trending-video data.", problem_statement: "Manual collection and analysis of regional YouTube trends is time-consuming, error-prone, and unable to provide dependable, timely insight.", tech_stack: JSON.stringify(["AWS", "Python", "ETL/ELT", "Data Warehousing", "Analytics"]), github_url: "https://github.com/arhamsheikh17/youtube-trending-data-pipeline" }),
+  project({ id: "rebtel", slug: "rebtel-enterprise-intelligence-hub", display_order: 3, title: "Rebtel Telecom & Fintech Intelligence Hub", short_description: "A GCP intelligence architecture unifying telecom, payment, support, and transfer signals for fraud, customer, network, and revenue analysis.", problem_statement: "Telecom and remittance teams struggle with fragmented CDR streams, payments, tickets, and transfers, limiting real-time visibility into risk and service health.", tech_stack: JSON.stringify(["Google Cloud Platform", "BigQuery", "Data Modelling", "Streaming", "Analytics"]), github_url: "https://github.com/arhamsheikh17/telecom-project" }),
+  project({ id: "kafka-stock", slug: "kafka-stock-market-pipeline", display_order: 4, title: "Real-Time Stock Market Pipeline with Kafka", short_description: "A Kafka producer-consumer pipeline that streams market events into an S3 data lake and makes them queryable through Glue and Athena.", problem_statement: "Financial teams need low-latency market-event ingestion and unified storage for monitoring, event-driven analytics, and stream-processing experiments.", architecture_text: "CSV market events flow through a Kafka producer and consumer into Amazon S3. AWS Glue catalogs the stored data so analysts can query it with Athena; EC2 hosts the Kafka broker.", tech_stack: JSON.stringify(["Apache Kafka", "AWS S3", "AWS Glue", "Athena", "EC2"]), github_url: "https://github.com/arhamsheikh17/kafka-dataEngineering-stockMarket-project" }),
+  project({ id: "msk-snowflake", slug: "amazon-msk-snowflake-streaming", display_order: 5, title: "Amazon MSK to Snowflake Streaming Pipeline", short_description: "A near-real-time path from event producer to Amazon MSK, S3, Snowpipe, and Snowflake for query-ready stock-tick analytics.", problem_statement: "Teams need reliable, low-latency warehouse ingestion without fragmented tooling or manual loading between the stream and analytical tables.", architecture_text: "Events move from a producer to Amazon MSK, through MSK Connect into S3, and then through Snowpipe into Snowflake for validation and analysis.", tech_stack: JSON.stringify(["Amazon MSK", "MSK Connect", "S3", "Snowpipe", "Snowflake"]), github_url: "https://github.com/arhamsheikh17/kafka-dataengineering-msk-stock" }),
+  project({ id: "snowflake-scd", slug: "snowflake-scd-data-warehouse", display_order: 6, title: "SCD Type 1 & 2 in Snowflake", short_description: "An automated Snowflake implementation for preserving dimensional history or applying current-state overwrites with near-real-time processing.", problem_statement: "Data warehouses must capture changing dimension records accurately while supporting both current-state reporting and historical analysis.", architecture_text: "The implementation combines Snowflake Streams, Tasks, Snowpipe, and stored procedures to automate CDC-style ingestion and SCD Type 1 and Type 2 handling.", tech_stack: JSON.stringify(["Snowflake", "AWS", "Snowpipe", "Streams", "Tasks"]), github_url: "https://github.com/arhamsheikh17/scd-data-warehousing-with-snowflake" }),
+];
+
+export const fallbackProject = fallbackProjects[0];
+
+const skillGroups = {
+  "Languages & foundations": ["Python", "SQL", "Java", "JavaScript / TypeScript"],
+  "Data engineering": ["ETL / ELT", "Apache Spark", "PySpark", "dbt", "Apache Airflow", "Apache Kafka", "Data Warehousing", "Data Modelling"],
+  "Cloud platforms": ["AWS", "Microsoft Azure", "Google Cloud Platform"],
+  "Cloud data stack": ["Snowflake", "Microsoft Fabric", "BigQuery", "Databricks", "S3", "Glue", "Lambda", "Athena", "EC2", "CloudWatch", "QuickSight"],
+  "Databases & analytics": ["SQL Server", "MySQL", "PostgreSQL", "SQLite", "Pandas", "NumPy", "Power BI", "Matplotlib", "Seaborn", "Streamlit"],
+  "Engineering tools": ["Docker", "Terraform", "Git", "GitHub", "VS Code", "Jupyter Notebook"],
+};
+
+const fallbackRows = {
+  skills: Object.entries(skillGroups).flatMap(([category, names], group) => names.map((name, index) => ({ id: `skill-${group}-${index}`, name, category, is_published: 1, display_order: group * 20 + index }))),
+  experiences: [
+    { id: "saylani", title: "Data Engineering Intern", organization: "Saylani — Zaitoon Ashraf IT Park", kind: "Internship", location: "On-site · Karachi", start_date: "July", end_date: "September", summary: "Built multi-cloud data pipelines and worked through dbt customer case studies using Kafka, AWS, Azure, GCP, dbt, Snowflake, and dashboarding tools.", is_published: 1, display_order: 1 },
+    { id: "aws-sbg", title: "Co-Lead", organization: "AWS Student Builders Group — UoK", kind: "Community leadership", location: "Karachi", start_date: "One-year tenure", end_date: "Present", summary: "Coordinate technical sessions and community activities that give university students practical exposure to AWS cloud services.", is_published: 1, display_order: 2 },
+    { id: "teacher", title: "O/A-Level Teacher & Tutor", organization: "Self-employed", kind: "Teaching", location: "Karachi", start_date: "2021", end_date: "Present", summary: "Taught 20+ students from schools including Generation's School, The Academy, and The Next School across Mathematics, Additional Mathematics, Computer Science, and English Language.", is_published: 1, display_order: 3 },
+    { id: "sentros", title: "Founder & CEO", organization: "Sentros AI", kind: "Entrepreneurship", location: "Karachi", start_date: "March 2026", end_date: "Present", summary: "Lead an automation agency focused on practical automation services for business platforms.", verification_url: "https://sentrosai-website.vercel.app/", is_published: 1, display_order: 4 },
+  ],
+  education: [{ id: "bsse", degree: "Bachelor of Science in Software Engineering", institution: "University of Karachi", field: "UBIT · 8th semester", start_year: "2023", end_year: "Expected December 2026", highlights: JSON.stringify(["Data Structures & Algorithms", "Database Systems", "Software Engineering", "Operating Systems", "Object-Oriented Programming", "Statistics & Probability", "Cloud and data coursework"]), is_published: 1, display_order: 1 }],
+  certifications: [],
+  achievements: [
+    { id: "community-lead", title: "Co-Lead, AWS Student Builders Group UoK", kind: "Leadership", organization: "AWS SBG UoK", date: "Current", description: "Help lead technical sessions and community activities that make AWS learning more practical for university students.", is_published: 1, display_order: 1 },
+    { id: "teaching-impact", title: "20+ O-Level Students Taught", kind: "Teaching impact", organization: "Independent tutoring", date: "2021 — Present", description: "More than four years of teaching students across Mathematics, Additional Mathematics, Computer Science, and English Language.", is_published: 1, display_order: 2 },
+  ],
 };
 
 function hasDb(): boolean { return Boolean(env.DB); }
 
 export async function getPublishedProjects(): Promise<ProjectRecord[]> {
-  if (!hasDb()) return [fallbackProject];
+  if (!hasDb()) return fallbackProjects;
   try {
-    const result = await env.DB!.prepare(
-      "SELECT id,title,slug,short_description,problem_statement,objectives,data_sources,architecture_text,implementation,engineering_decisions,challenges,results,learning,tech_stack,github_url,demo_url,article_url,status,is_featured,is_published,display_order FROM projects WHERE is_published = 1 ORDER BY is_featured DESC, display_order ASC, updated_at DESC LIMIT 24"
-    ).all<ProjectRecord>();
-    return result.results.length ? result.results : [fallbackProject];
-  } catch { return [fallbackProject]; }
+    const result = await env.DB!.prepare("SELECT id,title,slug,short_description,problem_statement,objectives,data_sources,architecture_text,implementation,engineering_decisions,challenges,results,learning,tech_stack,github_url,demo_url,article_url,status,is_featured,is_published,display_order FROM projects WHERE is_published = 1 ORDER BY is_featured DESC, display_order ASC, updated_at DESC LIMIT 24").all<ProjectRecord>();
+    return result.results.length ? result.results : fallbackProjects;
+  } catch { return fallbackProjects; }
 }
 
 export async function getProjectBySlug(slug: string): Promise<ProjectRecord | null> {
-  if (!hasDb()) return slug === fallbackProject.slug ? fallbackProject : null;
+  if (!hasDb()) return fallbackProjects.find((item) => item.slug === slug) ?? null;
   try {
-    const row = await env.DB!.prepare(
-      "SELECT id,title,slug,short_description,problem_statement,objectives,data_sources,architecture_text,implementation,engineering_decisions,challenges,results,learning,tech_stack,github_url,demo_url,article_url,status,is_featured,is_published,display_order FROM projects WHERE slug = ?1 AND is_published = 1 LIMIT 1"
-    ).bind(slug).first<ProjectRecord>();
-    return row ?? (slug === fallbackProject.slug ? fallbackProject : null);
-  } catch { return slug === fallbackProject.slug ? fallbackProject : null; }
+    const row = await env.DB!.prepare("SELECT id,title,slug,short_description,problem_statement,objectives,data_sources,architecture_text,implementation,engineering_decisions,challenges,results,learning,tech_stack,github_url,demo_url,article_url,status,is_featured,is_published,display_order FROM projects WHERE slug = ?1 AND is_published = 1 LIMIT 1").bind(slug).first<ProjectRecord>();
+    return row ?? fallbackProjects.find((item) => item.slug === slug) ?? null;
+  } catch { return fallbackProjects.find((item) => item.slug === slug) ?? null; }
 }
 
-export async function getPublicRows(table: "skills" | "experiences" | "education" | "certifications" | "achievements") {
-  if (!hasDb()) return [];
+export async function getPublicRows(table: keyof typeof fallbackRows): Promise<Record<string, unknown>[]> {
+  if (!hasDb()) return fallbackRows[table] as unknown as Record<string, unknown>[];
   try {
-    const allowed = { skills: "skills", experiences: "experiences", education: "education", certifications: "certifications", achievements: "achievements" } as const;
-    return (await env.DB!.prepare(`SELECT * FROM ${allowed[table]} WHERE is_published = 1 ORDER BY display_order ASC, updated_at DESC LIMIT 40`).all()).results;
-  } catch { return []; }
+    const result = (await env.DB!.prepare(`SELECT * FROM ${table} WHERE is_published = 1 ORDER BY display_order ASC, updated_at DESC LIMIT 80`).all()).results;
+    return result.length ? result : fallbackRows[table] as unknown as Record<string, unknown>[];
+  } catch { return fallbackRows[table] as unknown as Record<string, unknown>[]; }
 }

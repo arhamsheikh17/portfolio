@@ -1,143 +1,154 @@
 import Link from "next/link";
-import { getPublishedProjects, getPublicRows } from "@/lib/content";
 import {
-  ArrowDownRight,
-  ArrowRight,
-  Cloud,
-  Database,
-  Layers3,
-  Mail,
-  Menu,
-  ServerCog,
+  ArrowDownRight, ArrowRight, ArrowUpRight, BookOpen, BriefcaseBusiness,
+  CloudCog, Code2, DatabaseZap, GraduationCap, Mail, MapPin,
 } from "lucide-react";
-
-const skillGroups = [
-  { label: "Data systems", skills: ["SQL", "Data modeling", "ETL / ELT", "Data quality"] },
-  { label: "Cloud engineering", skills: ["Cloudflare", "Serverless", "D1", "Workers KV"] },
-  { label: "Software", skills: ["TypeScript", "Next.js", "Python", "APIs"] },
-];
+import { getPublishedProjects, getPublicRows } from "@/lib/content";
+import { PublicFooter, PublicHeader } from "@/components/public-shell";
 
 export const dynamic = "force-dynamic";
 
+const profiles = [
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/arhammsheikh/", icon: BriefcaseBusiness },
+  { label: "GitHub", href: "https://github.com/arhamsheikh17", icon: Code2 },
+  { label: "Medium", href: "https://medium.com/@arhamsheikh2250", icon: BookOpen },
+  { label: "Microsoft Learn", href: "https://learn.microsoft.com/en-us/users/arhamulhaqsheikh-9037/", icon: Code2 },
+];
+
 export default async function Home() {
-  const [projects, skillRows] = await Promise.all([getPublishedProjects(), getPublicRows("skills")]);
-  const project = projects[0];
-  const groupedSkills = skillRows.reduce<Record<string, string[]>>((groups, row) => {
-    const item = row as { category?: string; name?: string }; const category = item.category || "Other"; (groups[category] ||= []).push(item.name || ""); return groups;
+  const [projects, skills, experiences] = await Promise.all([
+    getPublishedProjects(), getPublicRows("skills"), getPublicRows("experiences"),
+  ]);
+  const groupedSkills = skills.reduce<Record<string, string[]>>((groups, row) => {
+    const item = row as { category?: string; name?: string };
+    const category = item.category || "Other";
+    (groups[category] ||= []).push(item.name || "");
+    return groups;
   }, {});
-  const dynamicSkillGroups = skillRows.length ? Object.entries(groupedSkills).map(([label, skills]) => ({ label, skills })) : skillGroups;
+
   return (
-    <main>
-      <header className="site-header">
-        <a className="brand" href="#top" aria-label="Arham Ul Haq Sheikh home">
-          <span className="brand-mark">A</span>
-          <span>Arham Ul Haq Sheikh</span>
-        </a>
-        <nav className="desktop-nav" aria-label="Primary navigation">
-          <a href="#about">About</a>
-          <a href="#work">Projects</a>
-          <a href="#experience">Experience</a>
-          <a href="#contact">Contact</a>
-        </nav>
-        <div className="header-actions">
-          <Link className="button button-ghost desktop-resume" href="/resume">Resume</Link>
-          <details className="mobile-menu">
-            <summary aria-label="Open navigation"><Menu size={20} /></summary>
-            <nav aria-label="Mobile navigation">
-              <a href="#about">About</a><a href="#work">Projects</a><a href="#experience">Experience</a><a href="#contact">Contact</a>
-            </nav>
-          </details>
-        </div>
-      </header>
+    <main className="portfolio-site" id="top">
+      <PublicHeader />
 
-      <section className="hero section-shell" id="top">
-        <div className="hero-copy">
-          <p className="eyebrow"><span /> Data engineer · Cloud data engineer · Software engineer</p>
-          <h1>I build data systems that stay <em>clear</em> under pressure.</h1>
-          <p className="hero-lede">I design dependable pipelines, cloud-native services, and maintainable software—turning scattered data into systems teams can trust and operate.</p>
-          <div className="hero-actions">
-            <a className="button button-primary" href="#work">Explore selected work <ArrowDownRight size={17} /></a>
-            <a className="button button-ghost" href="#contact">Start a conversation</a>
+      <section className="neo-hero section-shell">
+        <div className="neo-hero-copy">
+          <p className="neo-status"><span /> Karachi, Pakistan · Open to full-time & part-time roles</p>
+          <p className="neo-overline">Multi-Cloud Data & DevOps Engineer</p>
+          <h1>Building data systems that move from <em>signal</em> to scale.</h1>
+          <p className="neo-lede">Software Engineering graduate-in-progress building scalable ETL/ELT pipelines, data warehouses, and cloud analytics across AWS, Azure, and GCP.</p>
+          <div className="neo-actions">
+            <a className="neo-button neo-button-primary" href="#projects">View projects <ArrowDownRight size={18} /></a>
+            <Link className="neo-button neo-button-outline" href="/resume">Download resume</Link>
+            <Link className="neo-text-link" href="/contact">Contact me <ArrowUpRight size={17} /></Link>
           </div>
-          <div className="hero-proof" aria-label="Engineering principles">
-            <div><strong>01</strong><span>Architecture before tooling</span></div>
-            <div><strong>02</strong><span>Measured, testable outcomes</span></div>
-            <div><strong>03</strong><span>Low-maintenance by design</span></div>
+          <div className="neo-stack-line" aria-label="Strongest technologies">
+            <span>Python</span><i /> <span>Kafka</span><i /> <span>Airflow</span><i /> <span>Docker</span><i /> <span>Terraform</span>
           </div>
         </div>
 
-        <div className="system-panel" aria-label="Data system architecture illustration">
-          <div className="panel-top"><span>system / portfolio-v2</span><span className="live-label">building</span></div>
-          <div className="flow-stage">
-            <div className="flow-node source"><Database size={19} /><span>D1</span><small>structured content</small></div>
-            <div className="flow-line line-a"><i /></div>
-            <div className="flow-node core"><ServerCog size={23} /><span>Worker</span><small>typed repositories</small></div>
-            <div className="flow-line line-b"><i /></div>
-            <div className="flow-node output"><Cloud size={19} /><span>Public</span><small>fast delivery</small></div>
-            <div className="flow-node media"><Layers3 size={18} /><span>KV media</span></div>
-            <div className="flow-line line-c"><i /></div>
-          </div>
-          <div className="panel-log">
-            <span><i /> indexed reads</span>
-            <span><i /> owner-only writes</span>
-            <span><i /> zero keep-alive jobs</span>
+        <div className="portrait-stage">
+          <div className="portrait-frame" role="img" aria-label="Profile photograph will be added in the final phase" />
+          <div className="portrait-caption"><span>Profile image reserved</span><small>Final phase</small></div>
+          <div className="cloud-orbit" aria-hidden="true">
+            <span>AWS</span><span>AZURE</span><span>GCP</span>
           </div>
         </div>
       </section>
 
-      <section className="marquee" aria-label="Current focus">
-        <div>DATA PIPELINES <span>◆</span> CLOUD ARCHITECTURE <span>◆</span> ANALYTICS ENGINEERING <span>◆</span> SOFTWARE SYSTEMS <span>◆</span> DATA PIPELINES <span>◆</span> CLOUD ARCHITECTURE</div>
+      <section className="neo-proof" aria-label="Professional snapshot">
+        <div><strong>06</strong><span>End-to-end data projects</span></div>
+        <div><strong>03</strong><span>Cloud platforms</span></div>
+        <div><strong>20+</strong><span>Students taught</span></div>
+        <div><strong>4+</strong><span>Years teaching</span></div>
       </section>
 
-      <section className="about section-shell" id="about">
-        <div className="section-kicker">01 / About</div>
+      <section className="neo-about section-shell" id="about">
+        <div className="neo-section-label"><span>01</span> About</div>
+        <div className="neo-about-main">
+          <p className="neo-intro">I care about the difficult middle: where raw data, production constraints, and business decisions have to meet.</p>
+          <div className="neo-about-grid">
+            <p>I began my data engineering journey through Saylani’s Data Engineering program. Today, my focus is designing production-minded pipelines and improving solutions at the architecture level using Python, SQL, dbt, PySpark, and modern cloud platforms.</p>
+            <p>I’m completing a BS in Software Engineering at UBIT, University of Karachi, with graduation expected in December 2026. Alongside engineering, I teach O/A-Level students and co-lead the AWS Student Builders Group at UoK—work that has strengthened my leadership and communication.</p>
+          </div>
+          <div className="neo-focus-cards">
+            <article><DatabaseZap /><span>Primary craft</span><strong>Data Engineering</strong></article>
+            <article><CloudCog /><span>Cloud focus</span><strong>AWS · Azure · GCP</strong></article>
+            <article><BriefcaseBusiness /><span>Career direction</span><strong>Data · DevOps · Cloud</strong></article>
+          </div>
+        </div>
+      </section>
+
+      <section className="neo-projects section-shell" id="projects">
+        <div className="neo-section-head">
+          <div><div className="neo-section-label"><span>02</span> Projects</div><h2>Systems built end to end.</h2></div>
+          <Link className="neo-text-link" href="/projects">View all projects <ArrowRight size={17} /></Link>
+        </div>
+        <div className="neo-project-grid">
+          {projects.slice(0, 6).map((item, index) => {
+            const stack = JSON.parse(item.tech_stack || "[]") as string[];
+            return <article className={index === 0 ? "neo-project-card featured" : "neo-project-card"} key={item.id}>
+              <div className="neo-project-top"><span>{String(index + 1).padStart(2, "0")}</span><span>{stack[0] || "Data engineering"}</span></div>
+              <h3>{item.title}</h3>
+              <p>{item.short_description}</p>
+              <div className="neo-tags">{stack.slice(0, 4).map((tech) => <span key={tech}>{tech}</span>)}</div>
+              <div className="neo-project-links">
+                <Link href={`/projects/${item.slug}`}>Case study <ArrowRight size={16} /></Link>
+                {item.github_url && <a href={item.github_url} target="_blank" rel="noreferrer">GitHub <ArrowUpRight size={15} /></a>}
+              </div>
+            </article>;
+          })}
+        </div>
+      </section>
+
+      <section className="neo-experience section-shell" id="experience">
+        <div className="neo-section-head">
+          <div><div className="neo-section-label"><span>03</span> Experience</div><h2>Engineering, leadership, and teaching.</h2></div>
+          <Link className="neo-text-link" href="/experience">Full timeline <ArrowRight size={17} /></Link>
+        </div>
+        <div className="neo-timeline">
+          {experiences.map((row, index) => <article key={String(row.id ?? index)}>
+            <span className="neo-timeline-index">{String(index + 1).padStart(2, "0")}</span>
+            <div><p>{String(row.kind || "Role")}</p><h3>{String(row.title || "")}</h3><strong>{String(row.organization || "")}</strong></div>
+            <p>{String(row.summary || "")}</p>
+            <span className="neo-date">{[row.start_date, row.end_date].filter(Boolean).map(String).join(" — ")}</span>
+          </article>)}
+        </div>
+      </section>
+
+      <section className="neo-skills section-shell" id="skills">
+        <div className="neo-section-head"><div><div className="neo-section-label"><span>04</span> Technical stack</div><h2>Built across the data lifecycle.</h2></div></div>
+        <div className="neo-skill-groups">
+          {Object.entries(groupedSkills).map(([category, list], index) => <article key={category}>
+            <div><span>{String(index + 1).padStart(2, "0")}</span><h3>{category}</h3></div>
+            <ul>{list.map((skill) => <li key={skill}>{skill}</li>)}</ul>
+          </article>)}
+        </div>
+      </section>
+
+      <section className="neo-education section-shell">
+        <div className="neo-section-label"><span>05</span> Education</div>
+        <div className="neo-education-card">
+          <GraduationCap size={36} />
+          <div><p>2023 — Expected December 2026</p><h2>BS Software Engineering</h2><strong>UBIT · University of Karachi</strong></div>
+          <div><span>Current standing</span><strong>8th semester</strong><small>Karachi, Pakistan</small></div>
+        </div>
+      </section>
+
+      <section className="neo-contact section-shell" id="contact">
+        <div><p className="neo-overline">Let’s build something reliable.</p><h2>Open to Data Engineering, DevOps, and Cloud opportunities.</h2></div>
         <div>
-          <h2>Engineering for the whole lifecycle, not just the happy path.</h2>
-          <p>I focus on how data enters a system, how it changes, how people verify it, and how the system behaves when something goes wrong. The result is work that is easier to understand, safer to evolve, and less expensive to operate.</p>
+          <p>For roles, collaborations, and practical cloud or data work, reach out directly.</p>
+          <a className="neo-button neo-button-light" href="mailto:arhamsheikh2250@gmail.com"><Mail size={18} /> arhamsheikh2250@gmail.com</a>
+          <span className="neo-location"><MapPin size={16} /> Karachi, Pakistan</span>
         </div>
       </section>
 
-      <section className="work section-shell" id="work">
-        <div className="section-heading">
-          <div><p className="section-kicker">02 / Selected work</p><h2>Architecture and outcomes first.</h2></div>
-          <Link className="text-link" href="/projects">All projects <ArrowRight size={17} /></Link>
-        </div>
-        <article className="project-feature">
-          <div className="project-index">01</div>
-          <div className="project-copy">
-            <p className="project-type">Cloud platform · Full-stack data product</p>
-            <h3>{project.title}</h3>
-            <p>{project.short_description}</p>
-            <div className="tag-row">{JSON.parse(project.tech_stack || "[]").slice(0, 5).map((tech: string) => <span key={tech}>{tech}</span>)}</div>
-            <Link className="text-link" href={`/projects/${project.slug}`}>Read case study <ArrowRight size={17} /></Link>
-          </div>
-          <div className="project-visual" aria-hidden="true">
-            <div className="code-window"><span /><span /><span /><pre>{`public reads  → D1\nadmin writes  → verify → D1\nmedia bytes   → KV\nidle backend  → no action`}</pre></div>
-          </div>
-        </article>
+      <section className="neo-socials section-shell" aria-label="Professional profiles">
+        {profiles.map(({ label, href, icon: Icon }) => <a href={href} target="_blank" rel="noreferrer" key={label}><Icon size={18} /><span>{label}</span><ArrowUpRight size={16} /></a>)}
+        <a href="https://builder.aws.com/profile?tab=badges" target="_blank" rel="noreferrer"><CloudCog size={18} /><span>AWS Builder</span><ArrowUpRight size={16} /></a>
       </section>
 
-      <section className="skills section-shell" id="experience">
-        <div className="section-heading"><div><p className="section-kicker">03 / Working set</p><h2>Tools follow the problem.</h2></div></div>
-        <div className="skill-grid">
-          {dynamicSkillGroups.slice(0, 3).map((group, index) => (
-            <article key={group.label}>
-              <span>0{index + 1}</span><h3>{group.label}</h3>
-              <ul>{group.skills.map((skill) => <li key={skill}>{skill}</li>)}</ul>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="contact section-shell" id="contact">
-        <div><p className="section-kicker">04 / Contact</p><h2>Have a data problem worth untangling?</h2></div>
-        <div className="contact-copy"><p>Share the context, constraints, and outcome you need. I’ll start with the system, then work backward to the right tools.</p><Link className="button button-light" href="/contact">Send a message <Mail size={17} /></Link></div>
-      </section>
-
-      <footer className="site-footer section-shell">
-        <div><span className="brand-mark">A</span><p>Arham Ul Haq Sheikh<br /><small>Data · Cloud · Software</small></p></div>
-        <div className="footer-links"><a href="#top">Back to top</a><Link href="/projects">Projects</Link><Link href="/contact">Contact</Link></div>
-      </footer>
+      <PublicFooter />
     </main>
   );
 }

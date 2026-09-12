@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import "./portfolio.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.SITE_URL ?? "https://arham-engineering-portfolio.cozy-cod-2181.chatgpt.site"),
-  title: { default: "Arham Ul Haq Sheikh — Data & Cloud Engineer", template: "%s — Arham Ul Haq Sheikh" },
-  description: "Data, cloud data, and software engineering portfolio focused on dependable systems and clear outcomes.",
+  metadataBase: new URL(process.env.SITE_URL ?? "https://arham-engineering-portfolio.arhamsheikh2250.chatgpt.site"),
+  title: { default: "Arham Ul Haq Sheikh — Multi-Cloud Data & DevOps Engineer", template: "%s — Arham Ul Haq Sheikh" },
+  description: "Portfolio of Arham Ul Haq Sheikh, a multi-cloud data and DevOps engineer building scalable pipelines and analytics systems across AWS, Azure, and GCP.",
   icons: { icon: "/favicon.svg", shortcut: "/favicon.svg" },
 };
 
