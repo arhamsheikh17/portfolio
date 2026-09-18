@@ -35,10 +35,10 @@ export default async function Home() {
           <p className="neo-status"><span /> Karachi, Pakistan · Open to full-time & part-time roles</p>
           <p className="neo-overline">Multi-Cloud Data & DevOps Engineer</p>
           <h1>Building data systems that move from <em>signal</em> to scale.</h1>
-          <p className="neo-lede">Software Engineering graduate-in-progress building scalable ETL/ELT pipelines, data warehouses, and cloud analytics across AWS, Azure, and GCP.</p>
+          <p className="neo-lede">Software Engineering student graduating in December 2026, building scalable ETL/ELT pipelines, data warehouses, cloud analytics, and reliable web interfaces.</p>
           <div className="neo-actions">
             <a className="neo-button neo-button-primary" href="#projects">View projects <ArrowDownRight size={18} /></a>
-            <Link className="neo-button neo-button-outline" href="/resume">Download resume</Link>
+            <Link className="neo-button neo-button-outline" href="/resume">View resume</Link>
             <Link className="neo-text-link" href="/contact">Contact me <ArrowUpRight size={17} /></Link>
           </div>
           <div className="neo-stack-line" aria-label="Strongest technologies">
@@ -68,7 +68,7 @@ export default async function Home() {
           <p className="neo-intro">I care about the difficult middle: where raw data, production constraints, and business decisions have to meet.</p>
           <div className="neo-about-grid">
             <p>I began my data engineering journey through Saylani’s Data Engineering program. Today, my focus is designing production-minded pipelines and improving solutions at the architecture level using Python, SQL, dbt, PySpark, and modern cloud platforms.</p>
-            <p>I’m completing a BS in Software Engineering at UBIT, University of Karachi, with graduation expected in December 2026. Alongside engineering, I teach O/A-Level students and co-lead the AWS Student Builders Group at UoK—work that has strengthened my leadership and communication.</p>
+            <p>I’m completing a BS in Software Engineering at UBIT, University of Karachi, and will graduate in December 2026 as a Software Engineer. Alongside engineering, I teach O/A-Level students and co-lead the AWS Student Builders Group at UoK—work that has strengthened my leadership and communication.</p>
           </div>
           <div className="neo-focus-cards">
             <article><DatabaseZap /><span>Primary craft</span><strong>Data Engineering</strong></article>
@@ -129,8 +129,8 @@ export default async function Home() {
         <div className="neo-section-label"><span>05</span> Education</div>
         <div className="neo-education-card">
           <GraduationCap size={36} />
-          <div><p>2023 — Expected December 2026</p><h2>BS Software Engineering</h2><strong>UBIT · University of Karachi</strong></div>
-          <div><span>Current standing</span><strong>8th semester</strong><small>Karachi, Pakistan</small></div>
+          <div><p>2023 — Graduating December 2026</p><h2>BS Software Engineering</h2><strong>UBIT · University of Karachi</strong></div>
+          <div><span>Expected graduation</span><strong>December 2026</strong><small>Software Engineer · Karachi, Pakistan</small></div>
         </div>
       </section>
 
@@ -139,6 +139,7 @@ export default async function Home() {
         <div>
           <p>For roles, collaborations, and practical cloud or data work, reach out directly.</p>
           <a className="neo-button neo-button-light" href="mailto:arhamsheikh2250@gmail.com"><Mail size={18} /> arhamsheikh2250@gmail.com</a>
+          <a className="neo-phone-link" href="tel:+923182219239">+92 318 221 9239</a>
           <span className="neo-location"><MapPin size={16} /> Karachi, Pakistan</span>
         </div>
       </section>
