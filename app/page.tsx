@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import {
   ArrowDownRight, ArrowRight, ArrowUpRight, BookOpen, BriefcaseBusiness,
   CloudCog, Code2, DatabaseZap, GraduationCap, Mail, MapPin,
@@ -38,8 +39,8 @@ export default async function Home() {
           <p className="neo-lede">Software Engineering student graduating in December 2026, building scalable ETL/ELT pipelines, data warehouses, cloud analytics, and reliable web interfaces.</p>
           <div className="neo-actions">
             <a className="neo-button neo-button-primary" href="#projects">View projects <ArrowDownRight size={18} /></a>
-            <Link className="neo-button neo-button-outline" href="/resume">View resume</Link>
-            <Link className="neo-text-link" href="/contact">Contact me <ArrowUpRight size={17} /></Link>
+            <a className="neo-button neo-button-outline" href="/resume">View resume</a>
+            <a className="neo-text-link" href="/contact">Contact me <ArrowUpRight size={17} /></a>
           </div>
           <div className="neo-stack-line" aria-label="Strongest technologies">
             <span>Python</span><i /> <span>Kafka</span><i /> <span>Airflow</span><i /> <span>Docker</span><i /> <span>Terraform</span>
@@ -47,11 +48,8 @@ export default async function Home() {
         </div>
 
         <div className="portrait-stage">
-          <div className="portrait-frame"><img src="/profile/arham-sheikh.webp" alt="Arham Ul Haq Sheikh" /></div>
+          <div className="portrait-frame"><Image src="/profile/arham-sheikh.webp" alt="Arham Ul Haq Sheikh" fill priority sizes="(max-width: 620px) 250px, 285px" /></div>
           <div className="portrait-caption"><span>Arham Ul Haq Sheikh</span><small>Data & DevOps Engineer</small></div>
-          <div className="cloud-orbit" aria-hidden="true">
-            <span>AWS</span><span>AZURE</span><span>GCP</span>
-          </div>
         </div>
       </section>
 
@@ -67,8 +65,8 @@ export default async function Home() {
         <div className="neo-about-main">
           <p className="neo-intro">I care about the difficult middle: where raw data, production constraints, and business decisions have to meet.</p>
           <div className="neo-about-grid">
-            <p>I began my data engineering journey through Saylani’s Data Engineering program. Today, my focus is designing production-minded pipelines and improving solutions at the architecture level using Python, SQL, dbt, PySpark, and modern cloud platforms.</p>
-            <p>I’m completing a BS in Software Engineering at UBIT, University of Karachi, and will graduate in December 2026 as a Software Engineer. Alongside engineering, I teach O/A-Level students and co-lead the AWS Student Builders Group at UoK—work that has strengthened my leadership and communication.</p>
+            <article><span>01 / Foundation</span><h3>Engineering with production in mind.</h3><p>I began my data engineering journey through Saylani’s Data Engineering program. Today, my focus is designing production-minded pipelines and improving solutions at the architecture level using Python, SQL, dbt, PySpark, and modern cloud platforms.</p></article>
+            <article><span>02 / Direction</span><h3>Learning, leading, and teaching.</h3><p>I’m completing a BS in Software Engineering at UBIT, University of Karachi, and will graduate in December 2026 as a Software Engineer. Alongside engineering, I teach O/A-Level students and co-lead the AWS Student Builders Group at UoK—work that has strengthened my leadership and communication.</p></article>
           </div>
           <div className="neo-focus-cards">
             <article><DatabaseZap /><span>Primary craft</span><strong>Data Engineering</strong></article>
@@ -86,13 +84,14 @@ export default async function Home() {
         <div className="neo-project-grid">
           {projects.slice(0, 6).map((item, index) => {
             const stack = JSON.parse(item.tech_stack || "[]") as string[];
+            const isCaseStudy = item.slug === "rebtel-enterprise-intelligence-hub";
             return <article className={index === 0 ? "neo-project-card featured" : "neo-project-card"} key={item.id}>
               <div className="neo-project-top"><span>{String(index + 1).padStart(2, "0")}</span><span>{stack[0] || "Data engineering"}</span></div>
               <h3>{item.title}</h3>
               <p>{item.short_description}</p>
               <div className="neo-tags">{stack.slice(0, 4).map((tech) => <span key={tech}>{tech}</span>)}</div>
               <div className="neo-project-links">
-                <Link href={`/projects/${item.slug}`}>Case study <ArrowRight size={16} /></Link>
+                <Link href={`/projects/${item.slug}`}>{isCaseStudy ? "Case study" : "Project details"} <ArrowRight size={16} /></Link>
                 {item.github_url && <a href={item.github_url} target="_blank" rel="noreferrer">GitHub <ArrowUpRight size={15} /></a>}
               </div>
             </article>;

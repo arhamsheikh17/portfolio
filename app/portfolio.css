@@ -193,3 +193,63 @@
   html{scroll-behavior:auto!important}
   .portfolio-site *, .portfolio-site *::before, .portfolio-site *::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
 }
+
+/* Final portfolio sizing and interaction pass */
+.portrait-stage{min-height:430px}
+.portrait-frame{width:min(285px,68vw)}
+.cloud-orbit{display:none}
+.neo-proof div{min-height:94px;padding:20px clamp(18px,2.8vw,38px)}
+.neo-proof strong{font-size:clamp(1.65rem,2.4vw,2.5rem)}
+.neo-about-grid{gap:22px}
+.neo-about-grid article{padding:24px;border:1px solid var(--line);background:linear-gradient(145deg,rgba(77,228,255,.035),rgba(10,25,41,.82))}
+.neo-about-grid article>span{color:var(--cyan);font:700 .6rem var(--font-mono);letter-spacing:.1em;text-transform:uppercase}
+.neo-about-grid h3{max-width:420px;margin:15px 0 13px;color:#eef8ff;font-size:1.15rem;line-height:1.3}
+.neo-about-grid p{margin:0;color:#91a9bc;font-size:.92rem;line-height:1.75}
+.neo-project-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.neo-project-card,.neo-project-card.featured{grid-column:auto;min-height:350px;padding:25px}
+.neo-project-card h3{margin:34px 0 16px;font-size:clamp(1.55rem,2.25vw,2.25rem)}
+.neo-project-card p{font-size:.9rem}
+.neo-experience{padding-bottom:72px}
+.neo-skills{padding-top:72px}
+.contact-menu,.mobile-menu{position:relative}
+.contact-menu>button,.mobile-menu>button{appearance:none;font:inherit;background:transparent;cursor:pointer}
+.contact-menu>button{display:inline-flex;align-items:center;gap:7px;padding:10px 14px;border:1px solid var(--line);color:#dceaf3;font-size:.77rem;font-weight:700}
+.contact-menu>button:hover,.contact-menu.is-open>button{border-color:var(--cyan);color:var(--cyan)}
+.mobile-menu>button{width:44px;height:44px;display:grid;place-items:center;border:1px solid var(--line);color:#dceaf3}
+.contact-menu.is-open .contact-menu-panel,.mobile-menu.is-open nav{opacity:1;transform:none;visibility:visible;pointer-events:auto}
+.contact-menu.is-open>button svg{transform:rotate(45deg)}
+.mobile-menu.is-open>button{border-color:var(--cyan);color:var(--cyan);transform:rotate(2deg)}
+@media(min-width:981px) and (max-width:1180px){.neo-project-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:980px){
+  .neo-proof{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .neo-proof div{border-bottom:0!important}
+  .neo-project-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:760px){
+  .neo-project-grid{grid-template-columns:1fr}
+  .neo-project-card,.neo-project-card.featured{min-height:340px}
+  .neo-experience{padding-bottom:50px}
+  .neo-skills{padding-top:50px}
+}
+@media(max-width:620px){
+  .portrait-stage{min-height:335px}
+  .portrait-frame{width:min(250px,66vw)}
+  .neo-proof{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .neo-proof div{min-height:82px;padding:16px}
+  .neo-proof div:nth-child(odd){border-right:1px solid var(--line)}
+  .neo-proof div:nth-child(-n+2){border-bottom:1px solid var(--line)!important}
+  .neo-about-grid article{padding:21px}
+  .neo-project-card,.neo-project-card.featured{min-height:330px}
+}
+@media(max-width:420px){
+  .contact-menu>button{width:42px;height:42px;justify-content:center;padding:0;font-size:0}
+  .contact-menu>button svg{display:block}
+  .mobile-menu>button{width:42px;height:42px}
+  .neo-proof{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .neo-proof div,.neo-proof div:nth-child(2){border-right:0}
+  .neo-proof div:nth-child(odd){border-right:1px solid var(--line)}
+  .neo-proof div:nth-child(-n+2){border-bottom:1px solid var(--line)!important}
+  .neo-proof div:nth-child(n+3){border-bottom:0!important}
+  .neo-proof strong{font-size:1.5rem}
+  .neo-proof span{font-size:.64rem}
+}
