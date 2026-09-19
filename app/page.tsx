@@ -47,8 +47,8 @@ export default async function Home() {
         </div>
 
         <div className="portrait-stage">
-          <div className="portrait-frame" role="img" aria-label="Profile photograph will be added in the final phase" />
-          <div className="portrait-caption"><span>Profile image reserved</span><small>Final phase</small></div>
+          <div className="portrait-frame"><img src="/profile/arham-sheikh.webp" alt="Arham Ul Haq Sheikh" /></div>
+          <div className="portrait-caption"><span>Arham Ul Haq Sheikh</span><small>Data & DevOps Engineer</small></div>
           <div className="cloud-orbit" aria-hidden="true">
             <span>AWS</span><span>AZURE</span><span>GCP</span>
           </div>
@@ -146,7 +146,7 @@ export default async function Home() {
 
       <section className="neo-socials section-shell" aria-label="Professional profiles">
         {profiles.map(({ label, href, icon: Icon }) => <a href={href} target="_blank" rel="noreferrer" key={label}><Icon size={18} /><span>{label}</span><ArrowUpRight size={16} /></a>)}
-        <a href="https://builder.aws.com/profile?tab=badges" target="_blank" rel="noreferrer"><CloudCog size={18} /><span>AWS Builder</span><ArrowUpRight size={16} /></a>
+        <a href="https://www.credly.com/badges/8afb961f-7657-4791-835d-a7edd94a7747" target="_blank" rel="noreferrer"><CloudCog size={18} /><span>AWS Cloud Club</span><ArrowUpRight size={16} /></a>
       </section>
 
       <PublicFooter />
