@@ -253,3 +253,24 @@
   .neo-proof strong{font-size:1.5rem}
   .neo-proof span{font-size:.64rem}
 }
+
+/* Circular portrait crop: head through the Champion chest mark */
+.portrait-stage{min-height:350px}
+.portrait-frame{
+  width:min(260px,64vw);
+  aspect-ratio:1;
+  overflow:hidden;
+  border-radius:50%;
+  box-shadow:0 22px 55px rgba(0,159,196,.14),0 0 0 8px rgba(77,228,255,.035);
+}
+.portrait-frame::before,.portrait-frame::after{display:none}
+.portrait-frame img{
+  object-fit:cover;
+  object-position:center top;
+  transform:scale(1.24);
+  transform-origin:center top;
+}
+@media(max-width:620px){
+  .portrait-stage{min-height:300px}
+  .portrait-frame{width:min(225px,62vw)}
+}
