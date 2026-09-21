@@ -2,10 +2,12 @@ import { env } from "cloudflare:workers";
 import { z } from "zod";
 import { adminEntities, isAdminEntity } from "@/lib/admin-config";
 import { isAdminRequest } from "@/lib/auth";
+import { ensurePortfolioSeeded } from "@/lib/seed";
 
 type RouteProps = { params: Promise<{ entity: string }> };
 const valueSchema = z.union([z.string().max(12000), z.number().finite(), z.boolean(), z.null()]);
-const payloadSchema = z.object({ id: z.string().uuid().optional(), values: z.record(valueSchema) });
+const recordIdSchema = z.string().min(1).max(120);
+const payloadSchema = z.object({ id: recordIdSchema.optional(), values: z.record(valueSchema) });
 
 async function context(request: Request, params: RouteProps["params"]) {
   if (!(await isAdminRequest(request))) return { error: Response.json({ error: "Owner access required." }, { status: 403 }) };
@@ -32,6 +34,7 @@ function normalizeValues(fields: readonly string[], values: Record<string, unkno
 
 export async function GET(request: Request, { params }: RouteProps) {
   const ctx = await context(request, params); if ("error" in ctx) return ctx.error;
+  await ensurePortfolioSeeded(env.DB!);
   const query = new URL(request.url).searchParams.get("q")?.trim() ?? "";
   const where = query ? ` WHERE ${ctx.config.search.map((column) => `${column} LIKE ?1`).join(" OR ")}` : "";
   const order = "order" in ctx.config ? ctx.config.order : "display_order ASC, updated_at DESC";
@@ -62,6 +65,6 @@ export async function PATCH(request: Request, { params }: RouteProps) {
 
 export async function DELETE(request: Request, { params }: RouteProps) {
   const ctx = await context(request, params); if ("error" in ctx) return ctx.error;
-  const id = new URL(request.url).searchParams.get("id"); if (!id || !z.string().uuid().safeParse(id).success) return Response.json({ error: "A valid record id is required." }, { status: 400 });
+  const id = new URL(request.url).searchParams.get("id"); if (!id || !recordIdSchema.safeParse(id).success) return Response.json({ error: "A valid record id is required." }, { status: 400 });
   await env.DB!.prepare(`DELETE FROM ${ctx.config.table} WHERE id = ?1`).bind(id).run(); return Response.json({ ok: true });
 }

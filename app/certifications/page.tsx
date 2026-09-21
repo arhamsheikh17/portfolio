@@ -26,7 +26,7 @@ export default async function CertificationsPage() {
       {rows.map((row, index) => {
         const skills = (() => { try { return JSON.parse(String(row.skills || "[]")) as string[]; } catch { return []; } })();
         const url = row.credential_url ? String(row.credential_url) : "";
-        const image = certificateImages[String(row.id || "")];
+        const image = row.media_asset_id ? `/media/${String(row.media_asset_id)}` : certificateImages[String(row.id || "")];
         return <article className="credential-card" key={String(row.id ?? index)}>
           {image ? <a className="credential-image" href={image} target="_blank" rel="noreferrer" aria-label={`View ${String(row.title || "certificate")}`}><img src={image} alt={`${String(row.title || "Certificate")} issued to Arham Sheikh`} loading="lazy"/></a> : <div className="credential-image credential-placeholder"><Award size={54}/><span>Verified digital badge</span></div>}
           <div className="credential-top"><span>{String(index + 1).padStart(2, "0")}</span><Award size={22}/></div>

@@ -42,7 +42,7 @@ const skillGroups = {
   "Engineering tools": ["Docker", "Terraform", "Git", "GitHub", "VS Code", "Jupyter Notebook"],
 };
 
-const fallbackRows = {
+export const fallbackRows = {
   skills: Object.entries(skillGroups).flatMap(([category, names], group) => names.map((name, index) => ({ id: `skill-${group}-${index}`, name, category, is_published: 1, display_order: group * 20 + index }))),
   experiences: [
     { id: "saylani-intern", title: "Data Engineer Intern", organization: "Saylani Mass IT Training", kind: "Internship", location: "On-site · Karachi, Sindh, Pakistan", start_date: "June 2026", end_date: "September 26, 2026", summary: "Build end-to-end data products and production-ready cloud pipelines, with a focus on dependable ingestion, transformation, and analytics workflows.", technologies: JSON.stringify(["AWS", "Python", "SQL", "Data Pipelines"]), is_current: 0, is_published: 1, display_order: 1 },

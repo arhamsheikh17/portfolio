@@ -22,5 +22,5 @@ export async function POST(request: Request) {
   const buffer = await file.arrayBuffer(); if (!validSignature(file.type, new Uint8Array(buffer.slice(0, 16)))) return Response.json({ error: "The file contents do not match the declared type." }, { status: 400 });
   const id = crypto.randomUUID(); const safeName = file.name.toLowerCase().replace(/[^a-z0-9._-]+/g, "-").slice(-120); const key = `media/${kind}/${id}-${safeName}`;
   try { await mediaStore.put(key, buffer, { filename: file.name, contentType: file.type }); await env.DB.prepare("INSERT INTO media_assets (id,kv_key,filename,mime_type,size_bytes,alt_text,kind) VALUES (?1,?2,?3,?4,?5,?6,?7)").bind(id, key, file.name, file.type, file.size, altText, kind).run(); return Response.json({ id, url: `/media/${id}` }, { status: 201 }); }
-  catch (error) { try { await mediaStore.delete(key); } catch {} return Response.json({ error: error instanceof Error && error.message.includes("MEDIA") ? "Connect a Workers KV namespace as the MEDIA binding to enable uploads." : "Upload failed." }, { status: 503 }); }
+  catch (error) { try { await mediaStore.delete(key); } catch {} return Response.json({ error: error instanceof Error && error.message.includes("BUCKET") ? "Media storage is not available yet." : "Upload failed." }, { status: 503 }); }
 }

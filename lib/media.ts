@@ -6,15 +6,23 @@ export interface MediaStore {
   delete(key: string): Promise<void>;
 }
 
-export class KVMediaStore implements MediaStore {
-  private get binding(): KVNamespace {
-    const media = (env as Cloudflare.Env).MEDIA;
-    if (!media) throw new Error("Workers KV binding MEDIA is not configured.");
-    return media;
+export class R2MediaStore implements MediaStore {
+  private get binding(): R2Bucket {
+    const bucket = (env as Cloudflare.Env).BUCKET;
+    if (!bucket) throw new Error("R2 binding BUCKET is not configured.");
+    return bucket;
   }
-  async put(key: string, bytes: ArrayBuffer, metadata: Record<string, string>) { await this.binding.put(key, bytes, { metadata }); }
-  async get(key: string) { return this.binding.get(key, "arrayBuffer"); }
+  async put(key: string, bytes: ArrayBuffer, metadata: Record<string, string>) {
+    await this.binding.put(key, bytes, {
+      httpMetadata: { contentType: metadata.contentType },
+      customMetadata: metadata,
+    });
+  }
+  async get(key: string) {
+    const object = await this.binding.get(key);
+    return object ? object.arrayBuffer() : null;
+  }
   async delete(key: string) { await this.binding.delete(key); }
 }
 
-export const mediaStore: MediaStore = new KVMediaStore();
+export const mediaStore: MediaStore = new R2MediaStore();

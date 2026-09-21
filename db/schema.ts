@@ -44,7 +44,7 @@ export const education = sqliteTable("education", {
 }, (table) => [index("idx_education_public_order").on(table.isPublished, table.displayOrder)]);
 
 export const certifications = sqliteTable("certifications", {
-  id: text("id").primaryKey(), title: text("title").notNull(), issuer: text("issuer").notNull(), issueDate: text("issue_date"), expiryDate: text("expiry_date"), credentialId: text("credential_id"), credentialUrl: text("credential_url"), skills: text("skills").notNull().default("[]"), isFeatured: integer("is_featured", { mode: "boolean" }).notNull().default(false), isPublished: integer("is_published", { mode: "boolean" }).notNull().default(false), displayOrder: integer("display_order").notNull().default(0), ...timestamps,
+  id: text("id").primaryKey(), title: text("title").notNull(), issuer: text("issuer").notNull(), issueDate: text("issue_date"), expiryDate: text("expiry_date"), credentialId: text("credential_id"), credentialUrl: text("credential_url"), skills: text("skills").notNull().default("[]"), mediaAssetId: text("media_asset_id"), isFeatured: integer("is_featured", { mode: "boolean" }).notNull().default(false), isPublished: integer("is_published", { mode: "boolean" }).notNull().default(false), displayOrder: integer("display_order").notNull().default(0), ...timestamps,
 }, (table) => [index("idx_certifications_public_order").on(table.isPublished, table.displayOrder)]);
 
 export const achievements = sqliteTable("achievements", {
