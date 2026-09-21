@@ -1,4 +1,3 @@
-import Link from "next/link";
 import Image from "next/image";
 import {
   ArrowDownRight, ArrowRight, ArrowUpRight, BookOpen, BriefcaseBusiness,
@@ -79,7 +78,7 @@ export default async function Home() {
       <section className="neo-projects section-shell" id="projects">
         <div className="neo-section-head">
           <div><div className="neo-section-label"><span>02</span> Projects</div><h2>Systems built end to end.</h2></div>
-          <Link className="neo-text-link" href="/projects">View all projects <ArrowRight size={17} /></Link>
+          <a className="neo-text-link" href="/projects">View all projects <ArrowRight size={17} /></a>
         </div>
         <div className="neo-project-grid">
           {projects.slice(0, 6).map((item, index) => {
@@ -91,7 +90,7 @@ export default async function Home() {
               <p>{item.short_description}</p>
               <div className="neo-tags">{stack.slice(0, 4).map((tech) => <span key={tech}>{tech}</span>)}</div>
               <div className="neo-project-links">
-                <Link href={`/projects/${item.slug}`}>{isCaseStudy ? "Case study" : "Project details"} <ArrowRight size={16} /></Link>
+                <a href={`/projects/${item.slug}`}>{isCaseStudy ? "Case study" : "Project details"} <ArrowRight size={16} /></a>
                 {item.github_url && <a href={item.github_url} target="_blank" rel="noreferrer">GitHub <ArrowUpRight size={15} /></a>}
               </div>
             </article>;
@@ -102,7 +101,7 @@ export default async function Home() {
       <section className="neo-experience section-shell" id="experience">
         <div className="neo-section-head">
           <div><div className="neo-section-label"><span>03</span> Experience</div><h2>Engineering, leadership, and teaching.</h2></div>
-          <Link className="neo-text-link" href="/experience">Full timeline <ArrowRight size={17} /></Link>
+          <a className="neo-text-link" href="/experience">Full timeline <ArrowRight size={17} /></a>
         </div>
         <div className="neo-timeline">
           {experiences.map((row, index) => <article key={String(row.id ?? index)}>

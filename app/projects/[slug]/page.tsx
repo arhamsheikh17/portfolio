@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import { PublicFooter, PublicHeader } from "@/components/public-shell";
@@ -24,7 +23,7 @@ export default async function ProjectPage({ params }: Props) {
   return <main className="portfolio-site">
     <PublicHeader/>
     <article className="case-study section-shell">
-      <Link className="back-link" href="/projects"><ArrowLeft size={16}/> All projects</Link>
+      <a className="back-link" href="/projects"><ArrowLeft size={16}/> All projects</a>
       <header>
         <p className="section-kicker">{stack[0] || "Cloud data"} · {isCaseStudy ? "case study" : "project"}</p>
         <h1>{item.title}</h1><p>{item.short_description}</p>
