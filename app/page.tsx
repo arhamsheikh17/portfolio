@@ -42,7 +42,7 @@ export default async function Home() {
             <a className="neo-text-link" href="/contact">Contact me <ArrowUpRight size={17} /></a>
           </div>
           <div className="neo-stack-line" aria-label="Strongest technologies">
-            <span>Python</span><i /> <span>Kafka</span><i /> <span>Airflow</span><i /> <span>Docker</span><i /> <span>Terraform</span>
+            <span>Python</span><i /> <span>SQL</span><i /> <span>Databricks</span><i /> <span>dbt</span><i /> <span>Snowflake</span><i /> <span>Docker</span><i /> <span>Kafka</span><i /> <span>Terraform</span>
           </div>
         </div>
 
