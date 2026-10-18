@@ -32,7 +32,6 @@ export default async function Home() {
 
       <section className="neo-hero section-shell">
         <div className="neo-hero-copy">
-          <p className="neo-status"><span /> Karachi, Pakistan · Open to full-time & part-time roles</p>
           <p className="neo-overline">Multi-Cloud Data & DevOps Engineer</p>
           <h1>Building data systems that move from <em>signal</em> to scale.</h1>
           <p className="neo-lede">Software Engineering student graduating in December 2026, building scalable ETL/ELT pipelines, data warehouses, cloud analytics, and reliable web interfaces.</p>
@@ -81,7 +80,7 @@ export default async function Home() {
           <a className="neo-text-link" href="/projects">View all projects <ArrowRight size={17} /></a>
         </div>
         <div className="neo-project-grid">
-          {projects.slice(0, 6).map((item, index) => {
+          {projects.slice(0, 3).map((item, index) => {
             const stack = JSON.parse(item.tech_stack || "[]") as string[];
             const isCaseStudy = item.slug === "rebtel-enterprise-intelligence-hub";
             return <article className={index === 0 ? "neo-project-card featured" : "neo-project-card"} key={item.id}>

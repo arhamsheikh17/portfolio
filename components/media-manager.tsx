@@ -10,7 +10,7 @@ export function MediaManager() {
   const [kind, setKind] = useState("gallery");
   const [certifications, setCertifications] = useState<Array<{ id: string; title: string }>>([]);
   useEffect(() => {
-    fetch("/api/admin/certifications").then((response) => response.json()).then((data: { rows?: Array<{ id: string; title: string }> }) => setCertifications(data.rows ?? [])).catch(() => setCertifications([]));
+    fetch("/api/admin/certifications").then(async (response) => await response.json() as { rows?: Array<{ id: string; title: string }> }).then((data) => setCertifications(data.rows ?? [])).catch(() => setCertifications([]));
   }, []);
   async function upload(formData: FormData) {
     setBusy(true); setState("Uploading and validating…");

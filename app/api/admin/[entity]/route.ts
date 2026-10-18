@@ -2,6 +2,7 @@ import { env } from "cloudflare:workers";
 import { z } from "zod";
 import { adminEntities, isAdminEntity } from "@/lib/admin-config";
 import { isAdminRequest } from "@/lib/auth";
+import { readJsonBody, requestErrorResponse } from "@/lib/security";
 import { ensurePortfolioSeeded } from "@/lib/seed";
 
 type RouteProps = { params: Promise<{ entity: string }> };
@@ -27,6 +28,11 @@ function normalizeValues(fields: readonly string[], values: Record<string, unkno
     else if (["tech_stack", "impact", "technologies", "skills", "highlights"].includes(field)) {
       const items = String(value ?? "").split(",").map((item) => item.trim()).filter(Boolean);
       result[field] = JSON.stringify(items);
+    } else if (field.endsWith("_url") || field === "url") {
+      const url = String(value ?? "").trim();
+      if (url && !/^https?:\/\//i.test(url)) throw new Error("Links must start with https:// or http://.");
+      if (url) { const parsed = new URL(url); if (parsed.username || parsed.password) throw new Error("Links cannot contain credentials."); }
+      result[field] = url || null;
     } else result[field] = value == null ? null : String(value).trim();
   }
   return result;
@@ -40,13 +46,14 @@ export async function GET(request: Request, { params }: RouteProps) {
   const order = "order" in ctx.config ? ctx.config.order : "display_order ASC, updated_at DESC";
   const statement = env.DB!.prepare(`SELECT * FROM ${ctx.config.table}${where} ORDER BY ${order} LIMIT 100`);
   const result = query ? await statement.bind(`%${query.slice(0, 100)}%`).all() : await statement.all();
-  return Response.json({ rows: result.results });
+  return Response.json({ rows: result.results }, { headers: { "Cache-Control": "no-store" } });
 }
 
 export async function POST(request: Request, { params }: RouteProps) {
   const ctx = await context(request, params); if ("error" in ctx) return ctx.error;
-  const parsed = payloadSchema.safeParse(await request.json().catch(() => null)); if (!parsed.success) return Response.json({ error: "Invalid content payload." }, { status: 400 });
-  const values = normalizeValues(ctx.config.fields, parsed.data.values);
+  let body: unknown; try { body = await readJsonBody(request, 262144); } catch (error) { return requestErrorResponse(error); }
+  const parsed = payloadSchema.safeParse(body); if (!parsed.success) return Response.json({ error: "Invalid content payload." }, { status: 400 });
+  let values: ReturnType<typeof normalizeValues>; try { values = normalizeValues(ctx.config.fields, parsed.data.values); } catch { return Response.json({ error: "Use valid HTTP or HTTPS links without credentials." }, { status: 400 }); }
   for (const field of ctx.config.required) if (!String(values[field] ?? "").trim()) return Response.json({ error: `${field.replaceAll("_", " ")} is required.` }, { status: 400 });
   if (ctx.entity === "projects") { values.slug = String(values.slug || values.title).toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""); values.status ||= "completed"; }
   const id = crypto.randomUUID(); const columns = ["id", ...Object.keys(values)]; const placeholders = columns.map((_, index) => `?${index + 1}`);
@@ -56,8 +63,9 @@ export async function POST(request: Request, { params }: RouteProps) {
 
 export async function PATCH(request: Request, { params }: RouteProps) {
   const ctx = await context(request, params); if ("error" in ctx) return ctx.error;
-  const parsed = payloadSchema.safeParse(await request.json().catch(() => null)); if (!parsed.success || !parsed.data.id) return Response.json({ error: "A valid record id is required." }, { status: 400 });
-  const values = normalizeValues(ctx.config.fields, parsed.data.values); const columns = Object.keys(values); if (!columns.length) return Response.json({ error: "No changes provided." }, { status: 400 });
+  let body: unknown; try { body = await readJsonBody(request, 262144); } catch (error) { return requestErrorResponse(error); }
+  const parsed = payloadSchema.safeParse(body); if (!parsed.success || !parsed.data.id) return Response.json({ error: "A valid record id is required." }, { status: 400 });
+  let values: ReturnType<typeof normalizeValues>; try { values = normalizeValues(ctx.config.fields, parsed.data.values); } catch { return Response.json({ error: "Use valid HTTP or HTTPS links without credentials." }, { status: 400 }); } const columns = Object.keys(values); if (!columns.length) return Response.json({ error: "No changes provided." }, { status: 400 });
   const set = columns.map((column, index) => `${column} = ?${index + 1}`).concat(`updated_at = CURRENT_TIMESTAMP`).join(", ");
   await env.DB!.prepare(`UPDATE ${ctx.config.table} SET ${set} WHERE id = ?${columns.length + 1}`).bind(...Object.values(values), parsed.data.id).run();
   return Response.json({ ok: true });

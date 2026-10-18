@@ -76,3 +76,9 @@ export const projectMedia = sqliteTable("project_media", {
 export const contactMessages = sqliteTable("contact_messages", {
   id: text("id").primaryKey(), name: text("name").notNull(), email: text("email").notNull(), subject: text("subject").notNull(), message: text("message").notNull(), status: text("status").notNull().default("new"), createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
 }, (table) => [index("idx_contact_created").on(table.createdAt)]);
+
+export const contactRateLimits = sqliteTable("contact_rate_limits", {
+  key: text("key").primaryKey(),
+  windowStart: integer("window_start").notNull(),
+  attempts: integer("attempts").notNull().default(1),
+});

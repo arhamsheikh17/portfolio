@@ -1,6 +1,7 @@
 import { env } from "cloudflare:workers";
 import { isAdminRequest } from "@/lib/auth";
 import { mediaStore } from "@/lib/media";
+import { readBoundedBody, requestErrorResponse } from "@/lib/security";
 
 const imageTypes = new Set(["image/jpeg", "image/png", "image/webp", "image/avif"]);
 function validSignature(type: string, bytes: Uint8Array) {
@@ -15,7 +16,11 @@ function validSignature(type: string, bytes: Uint8Array) {
 export async function POST(request: Request) {
   if (!(await isAdminRequest(request))) return Response.json({ error: "Owner access required." }, { status: 403 });
   if (!env.DB) return Response.json({ error: "D1 database unavailable." }, { status: 503 });
-  const form = await request.formData(); const file = form.get("file"); const kind = String(form.get("kind") ?? "gallery"); const altText = String(form.get("alt_text") ?? "").trim();
+  if (Number(request.headers.get("content-length")) > 16 * 1024 * 1024) return Response.json({ error: "Upload is too large." }, { status: 413 });
+  let uploadBody: Uint8Array; try { uploadBody = await readBoundedBody(request, 16 * 1024 * 1024); } catch (error) { return requestErrorResponse(error); }
+  const form = await new Response(uploadBody as BodyInit, { headers: { "Content-Type": request.headers.get("content-type") || "" } }).formData().catch(() => null);
+  if (!form) return Response.json({ error: "Invalid upload." }, { status: 400 }); const file = form.get("file"); const kind = String(form.get("kind") ?? "gallery"); const altText = String(form.get("alt_text") ?? "").trim();
+  if (!["gallery", "certificate", "achievement", "resume"].includes(kind) || altText.length > 500) return Response.json({ error: "Invalid media details." }, { status: 400 });
   if (!(file instanceof File)) return Response.json({ error: "Choose a file to upload." }, { status: 400 });
   const max = imageTypes.has(file.type) ? 5 * 1024 * 1024 : file.type === "application/pdf" ? 15 * 1024 * 1024 : 0;
   if (!max || file.size > max) return Response.json({ error: "Use a JPEG, PNG, WebP, AVIF up to 5 MB, or a PDF up to 15 MB." }, { status: 400 });

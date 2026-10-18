@@ -15,6 +15,13 @@
       "when": 1789974025765,
       "tag": "0001_outgoing_blizzard",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1792325176404,
+      "tag": "0002_soft_vindicator",
+      "breakpoints": true
     }
   ]
 }

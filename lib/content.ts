@@ -75,22 +75,22 @@ export async function getPublishedProjects(): Promise<ProjectRecord[]> {
   if (!hasDb()) return fallbackProjects;
   try {
     const result = await env.DB!.prepare("SELECT id,title,slug,short_description,problem_statement,objectives,data_sources,architecture_text,implementation,engineering_decisions,challenges,results,learning,tech_stack,github_url,demo_url,article_url,status,is_featured,is_published,display_order FROM projects WHERE is_published = 1 ORDER BY is_featured DESC, display_order ASC, updated_at DESC LIMIT 24").all<ProjectRecord>();
-    return result.results.length ? result.results : fallbackProjects;
-  } catch { return fallbackProjects; }
+    return result.results;
+  } catch { return []; }
 }
 
 export async function getProjectBySlug(slug: string): Promise<ProjectRecord | null> {
   if (!hasDb()) return fallbackProjects.find((item) => item.slug === slug) ?? null;
   try {
     const row = await env.DB!.prepare("SELECT id,title,slug,short_description,problem_statement,objectives,data_sources,architecture_text,implementation,engineering_decisions,challenges,results,learning,tech_stack,github_url,demo_url,article_url,status,is_featured,is_published,display_order FROM projects WHERE slug = ?1 AND is_published = 1 LIMIT 1").bind(slug).first<ProjectRecord>();
-    return row ?? fallbackProjects.find((item) => item.slug === slug) ?? null;
-  } catch { return fallbackProjects.find((item) => item.slug === slug) ?? null; }
+    return row ?? null;
+  } catch { return null; }
 }
 
 export async function getPublicRows(table: keyof typeof fallbackRows): Promise<Record<string, unknown>[]> {
   if (!hasDb()) return fallbackRows[table] as unknown as Record<string, unknown>[];
   try {
     const result = (await env.DB!.prepare(`SELECT * FROM ${table} WHERE is_published = 1 ORDER BY display_order ASC, updated_at DESC LIMIT 80`).all()).results;
-    return result.length ? result : fallbackRows[table] as unknown as Record<string, unknown>[];
-  } catch { return fallbackRows[table] as unknown as Record<string, unknown>[]; }
+    return result;
+  } catch { return []; }
 }

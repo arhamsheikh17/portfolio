@@ -1,26 +1,24 @@
 import { headers } from "next/headers";
+import { env } from "cloudflare:workers";
+import { isSameOriginWrite } from "@/lib/security";
 
 export type AdminIdentity = { email: string; id: string };
 
-export async function getAdminIdentity(): Promise<AdminIdentity | null> {
-  const requestHeaders = await headers();
-  const accessEmail = requestHeaders.get("cf-access-authenticated-user-email");
-  const siteEmail = requestHeaders.get("oai-authenticated-user-email");
-  const email = accessEmail ?? siteEmail;
-  const id = requestHeaders.get("oai-authenticated-user-id") ?? email;
-  const allowed = process.env.ADMIN_ALLOWED_EMAIL?.trim().toLowerCase();
+function ownerIdentity(requestHeaders: Headers): AdminIdentity | null {
+  // Sites dispatch strips and supplies these identity headers. Never trust a bare CF email header.
+  const email = requestHeaders.get("oai-authenticated-user-email")?.trim().toLowerCase();
+  const id = requestHeaders.get("oai-authenticated-user-id");
   if (!email || !id) return null;
-  const localOwner = process.env.NODE_ENV !== "production" && siteEmail === "seedy@sites.test";
-  if (!accessEmail && !localOwner && (!allowed || email.toLowerCase() !== allowed)) return null;
-  if (allowed && email.toLowerCase() !== allowed) return null;
-  return { email, id };
+  const localOwner = process.env.NODE_ENV === "development" && email === "seedy@sites.test" && id === "local_seedy";
+  if (localOwner) return { email, id };
+  const allowed = (env.ADMIN_ALLOWED_EMAIL || process.env.ADMIN_ALLOWED_EMAIL)?.trim().toLowerCase();
+  return allowed && email === allowed ? { email, id } : null;
+}
+
+export async function getAdminIdentity(): Promise<AdminIdentity | null> {
+  return ownerIdentity(await headers());
 }
 
 export async function isAdminRequest(request: Request): Promise<boolean> {
-  const accessEmail = request.headers.get("cf-access-authenticated-user-email");
-  const siteEmail = request.headers.get("oai-authenticated-user-email");
-  const email = accessEmail ?? siteEmail;
-  const allowed = process.env.ADMIN_ALLOWED_EMAIL?.trim().toLowerCase();
-  const localOwner = process.env.NODE_ENV !== "production" && siteEmail === "seedy@sites.test";
-  return Boolean(email && (accessEmail || localOwner || (allowed && email.toLowerCase() === allowed)) && (!allowed || email.toLowerCase() === allowed));
+  return isSameOriginWrite(request) && Boolean(ownerIdentity(request.headers));
 }

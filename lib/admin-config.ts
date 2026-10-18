@@ -11,4 +11,4 @@ export const adminEntities = {
 } as const;
 
 export type AdminEntity = keyof typeof adminEntities;
-export function isAdminEntity(value: string): value is AdminEntity { return value in adminEntities; }
+export function isAdminEntity(value: string): value is AdminEntity { return Object.hasOwn(adminEntities, value); }
