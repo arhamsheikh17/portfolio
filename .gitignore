@@ -54,3 +54,24 @@ next-env.d.ts
 *.key
 *.p12
 *.pfx
+
+# Credential stores, database dumps, and private exports
+.git-credentials
+.netrc
+.ssh/
+.aws/
+*.jks
+*.keystore
+*.kdbx
+*.sqlite
+*.sqlite3
+*.sqlite-wal
+*.sqlite-shm
+*.db
+*.db-wal
+*.db-shm
+credentials.json
+service-account*.json
+secrets*.json
+secrets*.yaml
+secrets*.yml
