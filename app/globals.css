@@ -64,3 +64,26 @@ a:focus-visible, summary:focus-visible, button:focus-visible, input:focus-visibl
 @media (max-width: 560px) { .page-hero { padding-block: 72px 54px; }.project-list article { grid-template-columns: 1fr; }.project-open { grid-column: 1; }.contact-form, .admin-form { grid-template-columns: 1fr; padding: 22px; }.field-wide, .form-footer, .admin-form .wide, .admin-form-actions { grid-column: 1; }.form-footer { align-items: flex-start; flex-direction: column; }.admin-overview { padding: 45px 22px; }.admin-manager { padding: 18px; }.admin-tabs-list { grid-template-columns: 1fr 1fr !important; }.admin-header { padding: 0 16px; } }
 .record-list { padding-block: 70px 120px; }.record-list article { display: grid; grid-template-columns: 60px 1fr; gap: 25px; padding: 40px 0; border-bottom: 1px solid var(--border); }.record-list article > span { color: var(--primary); font: .7rem var(--font-mono); }.record-list h2 { margin: 7px 0 14px; font-size: clamp(1.6rem, 3vw, 2.8rem); letter-spacing: -.04em; }.record-list article p:last-child { max-width: 760px; color: #596575; line-height: 1.7; }.public-empty { padding: 70px; text-align: center; border: 1px dashed #aeb7c5; }.public-empty > span { color: var(--primary); font: .68rem var(--font-mono); text-transform: uppercase; }.public-empty h2 { margin: 18px 0 12px; font-size: clamp(1.8rem, 4vw, 3.4rem); }.public-empty p { color: #596575; }
 .media-manager { max-width: 1320px; margin: 0 auto 70px; display: grid; grid-template-columns: .65fr 1fr; gap: 50px; padding: 34px; background: white; border: 1px solid var(--border); }.media-manager h2 { margin: 8px 0 10px; font-size: 2rem; letter-spacing: -.04em; }.media-manager p { color: #606b7a; line-height: 1.6; }.media-manager form { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }.media-manager label { display: grid; gap: 7px; font-size: .76rem; font-weight: 700; }.media-manager select { height: 36px; padding: 0 10px; border: 1px solid var(--input); background: white; }.media-manager form button { align-self: end; }
+
+/* Responsive owner uploads: prevent the adjacent copy from stretching fields. */
+.media-manager{align-items:start}
+.media-manager>div,.media-manager form,.media-manager label{min-width:0}
+.media-manager form{align-content:start;align-items:start}
+.media-manager label{align-content:start}
+.media-manager input,.media-manager select{width:100%;max-width:100%;min-width:0}
+@media(max-width:980px){
+  .media-manager{grid-template-columns:minmax(0,1fr);gap:24px;margin-inline:auto;padding:28px}
+  .media-manager h2{max-width:none}
+}
+@media(max-width:620px){
+  .media-manager{padding:24px;gap:20px}
+  .media-manager form{grid-template-columns:minmax(0,1fr);gap:18px}
+  .media-manager input,.media-manager select,.media-manager button{min-height:44px}
+  .media-manager input,.media-manager select{font-size:16px}
+  .admin-dialog{max-height:calc(100dvh - 32px)!important}
+}
+@media(max-width:420px){
+  .media-manager{padding:20px}
+  .admin-search{grid-template-columns:auto minmax(0,1fr);gap:8px}
+  .admin-search>button{grid-column:1/-1;min-height:44px}
+}

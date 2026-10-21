@@ -4,6 +4,8 @@ import { PublicFooter, PublicHeader } from "@/components/public-shell";
 import { getPublicRows } from "@/lib/content";
 
 const certificateImages: Record<string, string> = {
+  "azure-administrator": "/certificates/microsoft-azure-administrator.png",
+  "azure-databricks-data-engineer": "/certificates/microsoft-azure-databricks-data-engineer.png",
   "fabric-data-engineer": "/certificates/microsoft-fabric-data-engineer.webp",
   "aws-cloud-practitioner": "/certificates/aws-cloud-practitioner-essentials.webp",
   "snowflake-warehouse": "/certificates/snowflake-data-warehouse.webp",

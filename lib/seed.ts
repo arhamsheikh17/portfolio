@@ -11,7 +11,15 @@ function insert(db: D1Database, table: string, row: SeedRow): D1PreparedStatemen
 
 export async function ensurePortfolioSeeded(db: D1Database): Promise<void> {
   const marker = await db.prepare("SELECT value FROM site_settings WHERE key = ?1 LIMIT 1").bind("portfolio_seed_version").first<{ value: string }>();
-  if (marker?.value === "1") return;
+  if (marker?.value === "2") return;
+  if (marker?.value === "1") {
+    const additions = fallbackRows.certifications.filter((row) => ["azure-administrator", "azure-databricks-data-engineer"].includes(row.id));
+    await db.batch([
+      ...additions.map((row) => insert(db, "certifications", row as SeedRow)),
+      db.prepare("UPDATE site_settings SET value=?1, updated_at=CURRENT_TIMESTAMP WHERE key=?2").bind("2", "portfolio_seed_version"),
+    ]);
+    return;
+  }
 
   const statements: D1PreparedStatement[] = [
     insert(db, "profiles", {
@@ -27,7 +35,7 @@ export async function ensurePortfolioSeeded(db: D1Database): Promise<void> {
     insert(db, "social_links", { id: "linkedin", platform: "LinkedIn", url: "https://www.linkedin.com/in/arhammsheikh/", is_published: 1, display_order: 1 }),
     insert(db, "social_links", { id: "github", platform: "GitHub", url: "https://github.com/arhamsheikh17", is_published: 1, display_order: 2 }),
     insert(db, "social_links", { id: "medium", platform: "Medium", url: "https://medium.com/@arhamsheikh2250", is_published: 1, display_order: 3 }),
-    insert(db, "site_settings", { id: crypto.randomUUID(), key: "portfolio_seed_version", value: "1" }),
+    insert(db, "site_settings", { id: crypto.randomUUID(), key: "portfolio_seed_version", value: "2" }),
   ];
 
   await db.batch(statements);

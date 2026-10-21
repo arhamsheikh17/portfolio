@@ -313,3 +313,14 @@
 .portfolio-site .contact-page .form-success button:hover{background:#a2f1ff;border-color:#a2f1ff}
 .portfolio-site .contact-page .form-success button:focus-visible{outline:2px solid #eef8ff;outline-offset:4px}
 @media(max-width:620px){.portfolio-site .contact-page .form-success{padding:24px}}
+/* Comfortable mobile touch targets and form text without changing desktop layout. */
+@media(max-width:620px){
+  .portfolio-site .mobile-menu>button,.portfolio-site .contact-menu>button{min-width:44px;min-height:44px}
+  .portfolio-site .site-footer .footer-links a,.neo-project-links a,.credential-card>a:not(.credential-image),.portfolio-site .case-links a{min-height:44px;display:inline-flex;align-items:center}
+  .portfolio-site .contact-form input,.portfolio-site .contact-form textarea{font-size:16px}
+}
+
+/* Keep header menus reachable on short landscape screens. */
+@media(max-width:980px){
+  .portfolio-site .contact-menu-panel,.portfolio-site .mobile-menu nav{max-height:calc(100dvh - 100px);overflow-y:auto;overscroll-behavior:contain}
+}
